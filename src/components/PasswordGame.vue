@@ -1,10 +1,31 @@
 <script>
-import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { PASSWORD_STATUS } from '../constants'
 
 export default {
   setup() {
     const state = reactive({
+      gameStatus: computed(() => {
+        if (state.status === PASSWORD_STATUS.FAIL) {
+          return {
+            styles: 'is-red',
+            text: 'Access Denied'
+          }
+        } else if (state.status === PASSWORD_STATUS.PASS) {
+          return {
+            styles: 'is-green',
+            text: 'Access Granted'
+          }
+        } else {
+          return {
+            styles: '',
+            text: 'Locked'
+          }
+        }
+      }),
+      userWins: computed(() => {
+        return state.status === PASSWORD_STATUS.PASS
+      }),
       status: 'In Progress',
       passwordInput: '',
       correctPassword: 0
@@ -17,29 +38,7 @@ export default {
   data() {
     return
   },
-  computed: {
-    gameStatus() {
-      if (this.status === PASSWORD_STATUS.FAIL) {
-        return {
-          styles: 'is-red',
-          text: 'Access Denied'
-        }
-      } else if (this.status === PASSWORD_STATUS.PASS) {
-        return {
-          styles: 'is-green',
-          text: 'Access Granted'
-        }
-      } else {
-        return {
-          styles: '',
-          text: 'Locked'
-        }
-      }
-    },
-    userWins() {
-      return this.status === PASSWORD_STATUS.PASS
-    }
-  },
+  computed: {},
   methods: {
     checkPassword() {
       if (this.correctPassword === this.passwordInput) {
